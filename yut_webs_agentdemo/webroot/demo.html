@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>my special demo.html</title>
+    <meta charset="UTF-8">
+    <script src="./jquery-3.3.1.min.js"></script>
+    <script src="./demo.js"></script>
+</head>
+<body>
+    <div><h2>用form提交数据=>form</h2></div>
+    <form action=/action/yutWebsAgentDemoEntry method="post">
+        <table>
+        <tr><td>命令:</td><td><input type="text" name="command" value="submitNameValue"></td></tr>
+        <tr><td>账号:</td><td><input type="text" name="name"></td></tr>
+        <tr><td>密码:</td><td><input type="password" name="address"></td></tr>
+        <tr><td><input type="submit" name="submit" value="submit"></td>
+            <td><input type="reset" value="reset"></td></tr>
+        </table>
+    </form>
+    
+    <div><h2>用ajax刷新=>触发getNetworkCfgInfor()</h2>
+        <div id="myDemoText"><h2></h2></div>
+    </div>
+    <button type="button" onclick="getNetworkCfgInfor()">AJAX刷新</button>
+    
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+    "name": "goahead-openssl",
+    "title": "OpenSSL support for GoAhead",
+    "description": "OpenSSL Support for GoAhead",
+    "version": "1.0.1",
+    "keywords": [
+        "me",
+        "ssl",
+        "openssl"
+    ],
+    "author": {
+        "name": "Embedthis Software",
+        "email": "dev@embedthis.com",
+        "url": "https://www.embedthis.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/embedthis/goahead-openssl.git"
+    },
+    "bugs": {
+        "url": "http://github.com/embedthis/goahead-openssl/issues"
+    },
+    "licenses": [
+        {
+            "type": "GPL",
+            "url": "http://www.gnu.org/licenses/gpl-2.0.html"
+        },
+        {
+            "type": "Commercial",
+            "url": "https://www.embedthis.com/licensing/"
+        }
+    ],
+    "devDependencies": {
+        "makeme": ">=1.0"
+    },
+    "export": [
+        "*.c",
+        "*.me"
+    ],
+    "origin": "embedthis/goahead-openssl"
+}

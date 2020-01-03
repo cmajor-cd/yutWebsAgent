@@ -1,0 +1,56 @@
+{
+    "name": "goahead",
+    "description": "Embedthis GoAhead Community Edition",
+    "title": "Embedthis GoAhead Community Edition",
+    "keywords": [
+        "goahead",
+        "http",
+        "webserver"
+    ],
+    "version": "5.1.0",
+    "homepage": "https://embedthis.com/goahead/",
+    "author": {
+        "name": "Embedthis Software",
+        "email": "dev@embedthis.com",
+        "url": "https://embedthis.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/embedthis/goahead.git"
+    },
+    "bugs": {
+        "email": "dev@embedthis.com",
+        "url": "http://github.com/embedthis/goahead/issues"
+    },
+    "licenses": [
+        {
+            "type": "GPL",
+            "url": "http://www.gnu.org/licenses/gpl-2.0.html"
+        },
+        {
+            "type": "Commercial",
+            "url": "https://embedthis.com/licensing/"
+        }
+    ],
+    "files": [
+        "dist/",
+        "doc/api/"
+    ],
+    "dependencies": {
+        "assist": "~0.1",
+        "goahead-mbedtls": "~2",
+        "me-win": "~0.1",
+        "osdep": "~1.0",
+        "ssl": "~1"
+    },
+    "optionalDependencies": {
+        "certs": "~0.1",
+        "goahead-matrixssl": "~0.1",
+        "goahead-openssl": "~1"
+    },
+    "devDependencies": {
+        "makeme": ">=0.9.0",
+        "pak": ">=0.11.0"
+    },
+    "import": true
+}
