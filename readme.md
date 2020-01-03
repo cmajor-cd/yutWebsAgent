@@ -1,10 +1,10 @@
-#项目情况简介
+# 项目情况简介
 * 本项目是基于 goAhead 开源 web server 的定制说明，本项目其他内容来源于我们自己的嵌入式项目，没有权属纠纷。
 * 本文档以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式。
 * 所有重要的修改处都以 ***yutWebsAgentDemo*** 作为标记以方便大家阅读比较。
 * 官方文档
    https://www.embedthis.com/goahead/doc/ref/api/goahead.html
-#demo代码如何运行
+# demo代码如何运行
 1. 准备环境
     **方法一Linux**：准备好Linux下的工作目录
     **方法二Windows**：打开Windows10-WSL Ubuntu环境并准备好工作目录
@@ -56,7 +56,7 @@
     <button type="button" onclick="getNetworkCfgInfor()">AJAX刷新</button>
 ***-------------------------------------------------------------***
 
-#目录说明
+# 目录说明
 1. goahead_src
    * goahead的官方源代码。
    * 该目录被 build.sh 引用。
@@ -94,8 +94,8 @@
     `releaseGo.sh`发布编译结果所在的文件目录
     注意：如果是最终发布，需要确保``./release/webroot/``中的web app代码已经编译过。因为```releaseGo.sh```没有去本web app的代码是否已经编译过！
 
-#定制说明
-##1.构建项目定制源代码目录
+# 定制说明
+## 1.构建项目定制源代码目录
 * 按照demo的目录结构构建自己的目录
   * 可以简单的 ``git clone``，也可以手工构建。
   * 将子目录名 ``yut_webs_agentdemo`` 改为自己的目录名，该目录存放自己的代码文件。
@@ -119,10 +119,10 @@
     build_bin_filename="yut_webs_agentdemo.bin"
     goahead_src_dir="../goahead_src"    
     ```
-##2.定制makefile文件
-###2.1.行为说明
+## 2.定制makefile文件
+### 2.1.行为说明
     编译中 ``build.sh`` 脚本会将makefile文件拷贝到 ``$goahead_src_projects_dir`` 中，并执行make。
-###2.1.定制方法
+### 2.1.定制方法
 * **PROFILE**
     如果是按照goahead官方的方法定制, build目录将在goahead目录下，该参数将影响**CONFIG**，最终决定了build的目录位置。
     在使用本方法定制时，我们更改了build目录位置到父一级目录，所以该参数无意义。
@@ -171,9 +171,9 @@
     对官方提供其他 features 的链接输出配置，可以根据具体的需求保留相关配置或者注释掉。
     比如，样例mk中将 `gopass` 注释掉后，该模块不再 `link` 出目标bin文件。
 
-##3.定制 main.c(goAction方式)的功能代码
+## 3.定制 main.c(goAction方式)的功能代码
     作为样例的main.c文件 yut_webs_agentdemo.c，来自于goAhead官方的样例文件 ./goahead_src/test.c。其中有一些不需要内容已经删除，保留了主要的、与goAction编程相关的以便于作为demo阅读。
-###3.1.action处理函数声明和注册
+### 3.1.action处理函数声明和注册
 * **声明action处理函数**
     在文件头部声明action处理函数，如： 
     ```
@@ -210,8 +210,8 @@
         return 0;
     }
     ```
-###3.2.action处理函数实现(form提交方式)
-####3.2.1.FORM技术特点
+### 3.2.action处理函数实现(form提交方式)
+#### 3.2.1.FORM技术特点
 form data 是html技术中常用的数据提交和刷新方式，它的主要特点如下：
 * ***全页面*** 刷新。
 * 它的html代码形态，样例：
@@ -236,7 +236,7 @@ form data 是html技术中常用的数据提交和刷新方式，它的主要特
         </table>
     </form>
 * 它的http数据格式，样例：```command=submitNameValue&name=&address=&submit=submit```
-####3.2.1.goAction处理方式
+#### 3.2.1.goAction处理方式
 goAction提供了API函数可以直接处理FORM样式数据。样例如下:
 ```
 int SUBMIT_NAME_VALUE_func(Webs *wp){
@@ -252,11 +252,11 @@ int SUBMIT_NAME_VALUE_func(Webs *wp){
     websDone(wp);
 }
 ```
-###3.3.action处理函数实现(ajax提交方式)
+### 3.3.action处理函数实现(ajax提交方式)
 大多数web页面都要求进行局部刷新，所以处理ajax是必不可少的能力。goAhead官方没有提供直接的API来处理ajax。但它的API结构中有名为`Webs`的数据结构，其保存了所有的`http消息`信息，我们可以通过Webs中的数据来处理ajax请求。
-####3.3.1.导入cJSON库
+#### 3.3.1.导入cJSON库
     外部三方库的引入方式前面章节已经详细讲解，请直接参考前面章节。
-####3.3.2.获取输入数据buff
+#### 3.3.2.获取输入数据buff
 我们可以通过goAction提供的API函数 `bufLen() / bufGetBlk() `来获取Webs中原始数据。
 * 获取输入http数据缓冲区：`wp->input`
 * 获取缓冲区数据用于后续处理: buff中即是获取的`json`数据包。
@@ -266,7 +266,7 @@ int SUBMIT_NAME_VALUE_func(Webs *wp){
     int len = bufGetBlk(&(wp->input), buff, bufLen(&(wp->input)));
     buff[len] = '\0'; //插入结束符
 ```
-####3.3.3.转换json数据到value
+#### 3.3.3.转换json数据到value
 我们使用`cJSON`的API函数来完成转换工作。
 ```
     cJSON* p_json_root = NULL;
@@ -293,7 +293,7 @@ int SUBMIT_NAME_VALUE_func(Webs *wp){
         ...后续处理代码
     }
 ```
-####3.3.4.打包json数据回传web app
+#### 3.3.4.打包json数据回传web app
 * **构建 response json包**
     * response包的格式定义如下：
         ```
@@ -374,9 +374,9 @@ int SUBMIT_NAME_VALUE_func(Webs *wp){
         websDone(wp);
     }
     ```
-##4.定制web app内容
+## 4.定制web app内容
 web app定制主要在demo.js中完成，有以下要点。
-###4.1. 格式化json传输格式
+### 4.1. 格式化json传输格式
 需要打包json数据为json字符串形式以方便http传输。
 ```
     var str = {
@@ -384,10 +384,10 @@ web app定制主要在demo.js中完成，有以下要点。
     }
     parameters = JSON.stringify(str);
 ```
-###4.2. 定义正确的ajax接收格式
+### 4.2. 定义正确的ajax接收格式
 需要定义为`dataType: 'json'`。
 在调试时如果出现问题，可以尝试将其改为`dataType: 'text'`，以便查看返回的具体内容。
-###4.3. 定义正确的action处理url地址
+### 4.3. 定义正确的action处理url地址
 此处需要与您在`main()`中注册的地址完全一致，ajax包才能被正确的路由到goAction注册函数处理。例如我们样例代码中的 ***yutWebsAgentDemoEntry***
 ```
     //yutWebsAgentDemo
@@ -395,7 +395,7 @@ web app定制主要在demo.js中完成，有以下要点。
     //2. define the function for this entry
     websDefineAction("yutWebsAgentDemoEntry", actionWebsAgentDemoEntry);
 ```
-###4.4. 完整的ajax处理函数样例
+### 4.4. 完整的ajax处理函数样例
 ```
 function getNetworkCfgInfor(){
     var str = {
