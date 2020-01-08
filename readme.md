@@ -1,9 +1,20 @@
 # 项目情况简介
-* 本项目是基于 goAhead 开源 web server 的定制说明，本项目其他内容来源于我们自己的嵌入式项目，没有权属纠纷。
-* 本文档以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式。
-* 所有重要的修改处都以 ***yutWebsAgentDemo*** 作为标记以方便大家阅读比较。
-* 官方文档
+* 本项目是基于 goAhead 开源 web server。
+* goAhead官方文档
    https://www.embedthis.com/goahead/doc/ref/api/goahead.html
+* 本文档以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式。
+* 本项目有以下两个子项目：
+## 子项目1：yutWebsAgentDemo    
+基于goAhead的代码和 makefile 的定制指南。   
+此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。
+该子项目所有代码和 makefile 文件在目录 ***`./demo_howto_customize_by_goahead_mk`***
+代码中所有重要的修改处都以 ***yutWebsAgentDemo*** 作为标记以方便大家阅读比较。
+详细内容=>(#Project_yutWebsAgentDemo)
+
+## 子项目2：yut_webs_agent    
+对goAhead的 makefile 进行了较多改造，集成了 ajax 交互方式的所有 web/api/hal 层的演示。您可以直接将其替换为自己的 web 和 api/hal 代码实现一个完整的嵌入式 wesAgent服务。    
+代码中所有重要的修改处都以 ***yut_webs_agent*** 作为标记以方便大家阅读比较。
+
 # demo代码如何运行
 1. 准备环境
    * **方法一Linux**：准备好Linux下的工作目录
@@ -15,13 +26,13 @@
     ```
 3. 进入源码目录并运行编译和发布脚本
     ```
-    $ cd yut_webs_agentdemo/
+    $ cd demo_howto_customize_by_goahead_mk/
     $ ./build.sh
     $ ./releaseGo.sh
     ```
     系统显示处如下log意味着运行成功。
     ```
-    yangyt@DESKTOP-MI7438E:/mnt/d/workspace/yut_webs_agentdemo$ ./releaseGo.sh
+    yangyt@DESKTOP-MI7438E:/mnt/d/workspace/demo_howto_customize_by_goahead_mk$ ./releaseGo.sh
     [sudo] password for yangyt:
     goahead: 2: Configuration for Embedthis GoAhead Community Edition
     goahead: 2: ---------------------------------------------
@@ -31,7 +42,7 @@
     goahead: 2: OS:                 linux
     goahead: 2: Host:               127.0.1.1
     goahead: 2: Directory:          /mnt/d/workspace/VS/yutWebsAgent/release/webserver
-    goahead: 2: Documents:          /mnt/d/workspace/VS/yutWebsAgent/yut_webs_agentdemo/../release/webroot
+    goahead: 2: Documents:          /mnt/d/workspace/VS/yutWebsAgent/demo_howto_customize_by_goahead_mk/../release/webroot
     goahead: 2: Configure:          me -d -q -platform linux-x86-default -configure . -gen make
     goahead: 2: ---------------------------------------------
     goahead: 2: Started http://0.0.0.0:8080
@@ -42,9 +53,9 @@
     <div><h4>用form提交数据=>form</h4></div>
     <form action=/action/yutWebsAgentDemoEntry method="post">
         <table>
-        <tr><td>命令:</td><td><input type="text" name="command" value="submitNameValue"></td></tr>
-        <tr><td>账号:</td><td><input type="text" name="name"></td></tr>
-        <tr><td>密码:</td><td><input type="password" name="address"></td></tr>
+        <tr><td>命令:</td><td><a>submitNameValue</a></td></tr>
+        <tr><td>账号:</td><td><a> nameValue </a></td></tr>
+        <tr><td>密码:</td><td><a>pwdValue</a></td></tr>
         <tr><td><input type="submit" name="submit" value="submit"></td>
             <td><input type="reset" value="reset"></td></tr>
         </table>
@@ -59,18 +70,19 @@
    * goahead的官方源代码。
    * 该目录被 build.sh 引用。
    * 如果要改动需要同步变更 build.sh 脚本中$定义的：goahead_src_dir / goahead_src_projects_dir
-2. yut_webs_agentdemo
+2. demo_howto_customize_by_goahead_mk
+   * ***子项目1*** 的演示代码目录
    * 移植定制文件目录，您可以变更为您自己的目录名。
-   * 如果要改动 **该目录名** 需要同步变更同级目录下的makefile文件``yut_webs_agent.mk`` 脚本中的```SRC_CODE_DIR```定义。
+   * 如果要改动 **该目录名** 需要同步变更同级目录下的makefile文件``yut_webs_agentdemo.mk`` 脚本中的```SRC_CODE_DIR```定义。
    * 该目录中的文件
      * source files
-     * makefile文件: 缺省的mk文件名为```yut_webs_agent.mk```，该文件需与`build.sh`脚本中的``$mk_filename``定义保持一致。 
+     * makefile文件: 缺省的mk文件名为```yut_webs_agentdemo.mk```，该文件需与`build.sh`脚本中的``$mk_filename``定义保持一致。 
      * build.sh编译脚本文件，该脚本定义了build-make方法，请注意定制是保证以下内容正确：
         ```
         goahead_src_dir="../goahead_src"
         goahead_src_projects_dir="../goahead_src/projects"
         build_dir="../build"
-        mk_filename="yut_webs_agent.mk"
+        mk_filename="yut_webs_agentdemo.mk"
         ```
      * releaseGo.sh调试发布脚本文件，该脚本将自定义的源文件编译完成并将最终的bin文件和相关文件+web app代码发布到``./release``目录下，请注意定制是保证以下内容正确：
         ```
@@ -83,22 +95,26 @@
         ```
    * 该目录中的子目录
      * webroot: web app的源代码目录，请保证**该子目录名**与`releaseGo.sh`脚本中的``$build_webs_root_dir``保持一致。
-3. libs
+3. yut_webs_agent_src
+   * ***子项目2*** yut_webs_agent 的 .c / makefile 代码演示代码目录
+4. yut_webs_agent_websrc
+   * ***子项目2*** yut_webs_agent 的 web 代码演示代码目录
+5. libs
    * 3方库文件存放目录。
-   * 该**目录名**需要与``yut_webs_agent.mk`` 脚本中的```LIBS_3rd```定义保持一致。
-3. build   
+   * 该**目录名**需要与``yut_webs_agentdemo.mk`` 脚本中的```LIBS_3rd```定义保持一致。
+6. build   
     build.sh编译脚本，编译定制代码后的输出文件存放目录。
-4. release   
+7. release   
     `releaseGo.sh`发布编译结果所在的文件目录。   
     注意：如果是最终发布，需要确保``./release/webroot/``中的web app代码已经编译过。因为```releaseGo.sh```没有去本web app的代码是否已经编译过！
 
-# 定制说明
+# 子项目yutWebsAgentDemo定制说明<div id="Project_yutWebsAgentDemo"></div>
 ## 1.构建项目定制源代码目录
 * 按照demo的目录结构构建自己的目录
   * 可以简单的 ``git clone``，也可以手工构建。
   * 将子目录名 ``yut_webs_agentdemo`` 改为自己的目录名，该目录存放自己的代码文件。
 * 构建自己的makefile文件
-  * 参考demo中的 ``yut_webs_agent.mk`` 创建自己的makefile文件。请注意该makefile文件的模板来自于``../goahead/projects``，您可以直接copy其中合适的mk文件过来并修改为**自定义文件名**。
+  * 参考demo中的 ``yut_webs_agentdemo.mk`` 创建自己的makefile文件。请注意该makefile文件的模板来自于``../goahead/projects``，您可以直接copy其中合适的mk文件过来并修改为**自定义文件名**。
 * 修改`build.sh`文件
   * 修改 ``build.sh`` 脚本中的 ``$mk_filename`` 为与上一节相同的**自定义文件名**。
   * 以本目录为base确保以下路径和目录名定义正确。
@@ -226,9 +242,9 @@ form data 是html技术中常用的数据提交和刷新方式，它的主要特
     ```
     <form action=/action/yutWebsAgentDemoEntry method="post">
         <table>
-        <tr><td>命令:</td><td><input type="text" name="command" value="submitNameValue"></td></tr>
-        <tr><td>账号:</td><td><input type="text" name="name"></td></tr>
-        <tr><td>密码:</td><td><input type="password" name="address"></td></tr>
+        <tr><td>命令:</td><td><a>submitNameValue</a></td></tr>
+        <tr><td>账号:</td><td><a> nameValue </a></td></tr>
+        <tr><td>密码:</td><td><a>pwdValue</a></td></tr>
         <tr><td><input type="submit" name="submit" value="submit"></td>
             <td><input type="reset" value="reset"></td></tr>
         </table>
@@ -424,3 +440,10 @@ function getNetworkCfgInfor(){
     });
 }
 ```
+# 子项目yut_webs_a_gent定制说明<div id="Project_yut_webs_agent"></div>
+## 1.构建项目定制源代码目录    
+## 2.构建 api/hal 层代码    
+## 3.构建 webs_agent.c 代码    
+## 4.构建 web 代码    
+## 5.构建 makefile    
+

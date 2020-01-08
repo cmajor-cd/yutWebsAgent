@@ -14,28 +14,17 @@
 
 NAME                  := goahead
 VERSION               := 5.1.0
-#-1.yutWebsAgentDemo::TODO
-#PROFILE               ?= default
-PROFILE ?= yut_webs_agentdemo
-#-2.yutWebsAgentDemo::TODO
-#ARCH ?=arm
+PROFILE               ?= default
+# PROFILE ?= yut_webs_agentdemo
 ARCH                  ?= $(shell uname -m | sed 's/i.86/x86/;s/x86_64/x64/;s/arm.*/arm/;s/mips.*/mips/')
 CC_ARCH               ?= $(shell echo $(ARCH) | sed 's/x86/i686/;s/x64/x86_64/')
 OS                    ?= linux
-#-3.yutWebsAgentDemo::TODO
 #CC ?= arm-fsl-linux-gnueabi-gcc
 CC                    ?= gcc
 AR                    ?= ar
 CONFIG                ?= $(OS)-$(ARCH)-$(PROFILE)
-#-3.yutWebsAgentDemo::TODO
-#--- reCfg dir to worksapce root
-#--- BUILD move to ../build
-#--- add path of 3rd libs
-#--- add path of my source code
 # BUILD                 ?= build/$(CONFIG)
-BUILD                 ?= ../build
-LIBS_3rd     ?= ../libs
-SRC_CODE_DIR ?= ../yut_webs_agentdemo
+
 
 LBIN                  ?= $(BUILD)/bin
 PATH                  := $(LBIN):$(PATH)
@@ -47,9 +36,8 @@ ME_COM_MBEDTLS        ?= 1
 ME_COM_NANOSSL        ?= 0
 ME_COM_OPENSSL        ?= 0
 ME_COM_OSDEP          ?= 1
-ME_COM_SSL            ?= 1
-#-3.yutWebsAgentDemo::TODO
-#ME_COM_SSL ?= 0
+# ME_COM_SSL            ?= 1
+ME_COM_SSL            ?= 0
 ME_COM_VXWORKS        ?= 0
 
 ME_COM_OPENSSL_PATH   ?= "/path/to/openssl"
@@ -63,6 +51,9 @@ endif
 ifeq ($(ME_COM_OPENSSL),1)
     ME_COM_SSL := 1
 endif
+
+# ifndef CL_MACRO_FLAG
+# endif
 
 CFLAGS                += -fPIC -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security -Wl,-z,relro,-z,now -Wl,--as-needed -Wl,--no-copy-dt-needed-entries -Wl,-z,noexecstatck -Wl,-z,noexecheap -w
 DFLAGS                += -D_REENTRANT -DPIC $(patsubst %,-D%,$(filter ME_%,$(MAKEFLAGS))) -DME_COM_COMPILER=$(ME_COM_COMPILER) -DME_COM_LIB=$(ME_COM_LIB) -DME_COM_MATRIXSSL=$(ME_COM_MATRIXSSL) -DME_COM_MBEDTLS=$(ME_COM_MBEDTLS) -DME_COM_NANOSSL=$(ME_COM_NANOSSL) -DME_COM_OPENSSL=$(ME_COM_OPENSSL) -DME_COM_OSDEP=$(ME_COM_OSDEP) -DME_COM_SSL=$(ME_COM_SSL) -DME_COM_VXWORKS=$(ME_COM_VXWORKS) 
@@ -101,11 +92,10 @@ ME_CACHE_PREFIX       ?= $(ME_ROOT_PREFIX)/var/spool/$(NAME)/cache
 ME_SRC_PREFIX         ?= $(ME_ROOT_PREFIX)$(NAME)-$(VERSION)
 
 
-#-4.yutWebsAgentDemo::TODO
-#TARGETS               += $(BUILD)/bin/goahead
+#-4.yutWebsAgent::TODO
+TARGETS               += $(BUILD)/bin/goahead
 #TARGETS               += $(BUILD)/bin/goahead-test
-TARGETS               += $(BUILD)/bin/yut_webs_agentdemo.bin
-# TARGETS               += $(BUILD)/bin/gopass
+#TARGETS               += $(BUILD)/bin/gopass
 
 unexport CDPATH
 
@@ -118,7 +108,7 @@ all build compile: prep $(TARGETS)
 .PHONY: prep
 
 prep:
-	@echo "      [Info] Use "make SHOW=1" to trace executed commands."
+	@echo "webs_agent_gohead_cust.mk=>[Info] Use "make SHOW=1" to trace executed commands."
 	@if [ "$(CONFIG)" = "" ] ; then echo WARNING: CONFIG not set ; exit 255 ; fi
 	@if [ "$(ME_APP_PREFIX)" = "" ] ; then echo WARNING: ME_APP_PREFIX not set ; exit 255 ; fi
 	@[ ! -x $(BUILD)/bin ] && mkdir -p $(BUILD)/bin; true
@@ -137,11 +127,6 @@ prep:
 	@echo "$(MAKEFLAGS)" >$(BUILD)/.makeflags
 
 clean:
-#-5.yutWebsAgentDemo::TODO
-	rm -f "$(BUILD)/obj/yut_webs_agentdemo.o"
-	rm -f "$(BUILD)/obj/cJSON.o"
-	rm -f "$(BUILD)/bin/yut_webs_agentdemo.bin"
-# 
 	rm -f "$(BUILD)/obj/action.o"
 	rm -f "$(BUILD)/obj/alloc.o"
 	rm -f "$(BUILD)/obj/auth.o"
@@ -627,45 +612,45 @@ $(BUILD)/.install-certs-modified: $(DEPS_37)
 #
 #   goahead
 #
-# DEPS_38 += $(BUILD)/bin/libgo.so
-# DEPS_38 += $(BUILD)/.install-certs-modified
-# DEPS_38 += $(BUILD)/inc/goahead.h
-# DEPS_38 += $(BUILD)/inc/js.h
-# DEPS_38 += $(BUILD)/obj/goahead.o
+DEPS_38 += $(BUILD)/bin/libgo.so
+DEPS_38 += $(BUILD)/.install-certs-modified
+DEPS_38 += $(BUILD)/inc/goahead.h
+DEPS_38 += $(BUILD)/inc/js.h
+DEPS_38 += $(BUILD)/obj/goahead.o
 
-# ifeq ($(ME_COM_MBEDTLS),1)
-#     LIBS_38 += -lmbedtls
-# endif
-# ifeq ($(ME_COM_MBEDTLS),1)
-#     LIBS_38 += -lgoahead-mbedtls
-# endif
-# ifeq ($(ME_COM_MBEDTLS),1)
-#     LIBS_38 += -lmbedtls
-# endif
-# ifeq ($(ME_COM_OPENSSL),1)
-#     LIBS_38 += -lgoahead-openssl
-# endif
-# ifeq ($(ME_COM_OPENSSL),1)
-# ifeq ($(ME_COM_SSL),1)
-#     LIBS_38 += -lssl
-#     LIBPATHS_38 += -L"$(ME_COM_OPENSSL_PATH)"
-# endif
-# endif
-# ifeq ($(ME_COM_OPENSSL),1)
-#     LIBS_38 += -lcrypto
-#     LIBPATHS_38 += -L"$(ME_COM_OPENSSL_PATH)"
-# endif
-# LIBS_38 += -lgo
-# ifeq ($(ME_COM_OPENSSL),1)
-#     LIBS_38 += -lgoahead-openssl
-# endif
-# ifeq ($(ME_COM_MBEDTLS),1)
-#     LIBS_38 += -lgoahead-mbedtls
-# endif
+ifeq ($(ME_COM_MBEDTLS),1)
+    LIBS_38 += -lmbedtls
+endif
+ifeq ($(ME_COM_MBEDTLS),1)
+    LIBS_38 += -lgoahead-mbedtls
+endif
+ifeq ($(ME_COM_MBEDTLS),1)
+    LIBS_38 += -lmbedtls
+endif
+ifeq ($(ME_COM_OPENSSL),1)
+    LIBS_38 += -lgoahead-openssl
+endif
+ifeq ($(ME_COM_OPENSSL),1)
+ifeq ($(ME_COM_SSL),1)
+    LIBS_38 += -lssl
+    LIBPATHS_38 += -L"$(ME_COM_OPENSSL_PATH)"
+endif
+endif
+ifeq ($(ME_COM_OPENSSL),1)
+    LIBS_38 += -lcrypto
+    LIBPATHS_38 += -L"$(ME_COM_OPENSSL_PATH)"
+endif
+LIBS_38 += -lgo
+ifeq ($(ME_COM_OPENSSL),1)
+    LIBS_38 += -lgoahead-openssl
+endif
+ifeq ($(ME_COM_MBEDTLS),1)
+    LIBS_38 += -lgoahead-mbedtls
+endif
 
-# $(BUILD)/bin/goahead: $(DEPS_38)
-# 	@echo '      [Link] $(BUILD)/bin/goahead'
-# 	$(CC) -o $(BUILD)/bin/goahead $(LDFLAGS) $(LIBPATHS)  "$(BUILD)/obj/goahead.o" $(LIBPATHS_38) $(LIBS_38) $(LIBS_38) $(LIBS) $(LIBS) 
+$(BUILD)/bin/goahead: $(DEPS_38)
+	@echo '      [Link] $(BUILD)/bin/goahead'
+	$(CC) -o $(BUILD)/bin/goahead $(LDFLAGS) $(LIBPATHS)  "$(BUILD)/obj/goahead.o" $(LIBPATHS_38) $(LIBS_38) $(LIBS_38) $(LIBS) $(LIBS) 
 
 #
 #   goahead-test
@@ -711,69 +696,69 @@ $(BUILD)/.install-certs-modified: $(DEPS_37)
 
 #-6.yutWebsAgentDemo::TODO
 #--- compile cJSON lib ---
-DEPS_yut_cjson_1 += $(LIBS_3rd)/cJSON/cJSON.h
+# DEPS_yut_cjson_1 += $(LIBS_3rd)/cJSON/cJSON.h
 
-$(BUILD)/inc/cJSON.h: $(DEPS_yut_cjson_1)
-	@echo '      [Copy] $(BUILD)/inc/cJSON.h'
-	mkdir -p "$(BUILD)/inc"
-	cp $(LIBS_3rd)/cJSON/cJSON.h $(BUILD)/inc/cJSON.h
+# $(BUILD)/inc/cJSON.h: $(DEPS_yut_cjson_1)
+# 	@echo '      [Copy] $(BUILD)/inc/cJSON.h'
+# 	mkdir -p "$(BUILD)/inc"
+# 	cp $(LIBS_3rd)/cJSON/cJSON.h $(BUILD)/inc/cJSON.h
 
-DEPS_yut_cjson_2 += $(BUILD)/inc/cJSON.h
-$(BUILD)/obj/cJSON.o: \
-    $(LIBS_3rd)/cJSON/cJSON.c $(DEPS_yut_cjson_2)
-	@echo '   [Compile] $(BUILD)/obj/cJSON.o'
-	$(CC) -c -o $(BUILD)/obj/cJSON.o $(CFLAGS) $(DFLAGS) -D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -DMBEDTLS_USER_CONFIG_FILE=\"embedtls.h\" -DME_COM_OPENSSL_PATH=$(ME_COM_OPENSSL_PATH) $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" $(LIBS_3rd)/cJSON/cJSON.c
+# DEPS_yut_cjson_2 += $(BUILD)/inc/cJSON.h
+# $(BUILD)/obj/cJSON.o: \
+#     $(LIBS_3rd)/cJSON/cJSON.c $(DEPS_yut_cjson_2)
+# 	@echo '   [Compile] $(BUILD)/obj/cJSON.o'
+# 	$(CC) -c -o $(BUILD)/obj/cJSON.o $(CFLAGS) $(DFLAGS) -D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -DMBEDTLS_USER_CONFIG_FILE=\"embedtls.h\" -DME_COM_OPENSSL_PATH=$(ME_COM_OPENSSL_PATH) $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" $(LIBS_3rd)/cJSON/cJSON.c
 
-#-7.yutWebsAgentDemo::TODO
-# compile to yutWebsAgentDemo main file ---
-DEPS_yut_main_1 += $(BUILD)/inc/goahead.h
-DEPS_yut_main_1 += $(BUILD)/inc/js.h
+# #-7.yutWebsAgentDemo::TODO
+# # compile to yutWebsAgentDemo main file ---
+# DEPS_yut_main_1 += $(BUILD)/inc/goahead.h
+# DEPS_yut_main_1 += $(BUILD)/inc/js.h
 
-$(BUILD)/obj/yut_webs_agentdemo.o: \
-    $(SRC_CODE_DIR)/yut_webs_agentdemo.c $(DEPS_yut_main_1)
-	@echo '   [Compile] $(BUILD)/obj/yut_webs_agentdemo.o'
-	$(CC) -c -o $(BUILD)/obj/yut_webs_agentdemo.o $(CFLAGS) $(DFLAGS) -D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -DMBEDTLS_USER_CONFIG_FILE=\"embedtls.h\" -DME_COM_OPENSSL_PATH=$(ME_COM_OPENSSL_PATH) $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" $(SRC_CODE_DIR)/yut_webs_agentdemo.c
+# $(BUILD)/obj/yut_webs_agentdemo.o: \
+#     $(SRC_CODE_DIR)/yut_webs_agentdemo.c $(DEPS_yut_main_1)
+# 	@echo '   [Compile] $(BUILD)/obj/yut_webs_agentdemo.o'
+# 	$(CC) -c -o $(BUILD)/obj/yut_webs_agentdemo.o $(CFLAGS) $(DFLAGS) -D_FILE_OFFSET_BITS=64 -D_FILE_OFFSET_BITS=64 -DMBEDTLS_USER_CONFIG_FILE=\"embedtls.h\" -DME_COM_OPENSSL_PATH=$(ME_COM_OPENSSL_PATH) $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" $(SRC_CODE_DIR)/yut_webs_agentdemo.c
 
-#-8.yutWebsAgentDemo::TODO
-# link to exe bin ---
-DEPS_yut_main_x += $(BUILD)/bin/libgo.so
-DEPS_yut_main_x += $(BUILD)/.install-certs-modified
-DEPS_yut_main_x += $(BUILD)/obj/cJSON.o
-DEPS_yut_main_x += $(BUILD)/obj/yut_webs_agentdemo.o
+# #-8.yutWebsAgentDemo::TODO
+# # link to exe bin ---
+# DEPS_yut_main_x += $(BUILD)/bin/libgo.so
+# DEPS_yut_main_x += $(BUILD)/.install-certs-modified
+# DEPS_yut_main_x += $(BUILD)/obj/cJSON.o
+# DEPS_yut_main_x += $(BUILD)/obj/yut_webs_agentdemo.o
 
-ifeq ($(ME_COM_MBEDTLS),1)
-    LIBS_yut_main_x += -lmbedtls
-endif
-ifeq ($(ME_COM_MBEDTLS),1)
-    LIBS_yut_main_x += -lgoahead-mbedtls
-endif
-ifeq ($(ME_COM_MBEDTLS),1)
-    LIBS_yut_main_x += -lmbedtls
-endif
-ifeq ($(ME_COM_OPENSSL),1)
-    LIBS_yut_main_x += -lgoahead-openssl
-endif
-ifeq ($(ME_COM_OPENSSL),1)
-ifeq ($(ME_COM_SSL),1)
-    LIBS_yut_main_x += -lssl
-    LIBPATHS_yut_main_x += -L"$(ME_COM_OPENSSL_PATH)"
-endif
-endif
-ifeq ($(ME_COM_OPENSSL),1)
-    LIBS_yut_main_x += -lcrypto
-    LIBPATHS_yut_main_x += -L"$(ME_COM_OPENSSL_PATH)"
-endif
-LIBS_yut_main_x += -lgo
-ifeq ($(ME_COM_OPENSSL),1)
-    LIBS_yut_main_x += -lgoahead-openssl
-endif
-ifeq ($(ME_COM_MBEDTLS),1)
-    LIBS_yut_main_x += -lgoahead-mbedtls
-endif
+# ifeq ($(ME_COM_MBEDTLS),1)
+#     LIBS_yut_main_x += -lmbedtls
+# endif
+# ifeq ($(ME_COM_MBEDTLS),1)
+#     LIBS_yut_main_x += -lgoahead-mbedtls
+# endif
+# ifeq ($(ME_COM_MBEDTLS),1)
+#     LIBS_yut_main_x += -lmbedtls
+# endif
+# ifeq ($(ME_COM_OPENSSL),1)
+#     LIBS_yut_main_x += -lgoahead-openssl
+# endif
+# ifeq ($(ME_COM_OPENSSL),1)
+# ifeq ($(ME_COM_SSL),1)
+#     LIBS_yut_main_x += -lssl
+#     LIBPATHS_yut_main_x += -L"$(ME_COM_OPENSSL_PATH)"
+# endif
+# endif
+# ifeq ($(ME_COM_OPENSSL),1)
+#     LIBS_yut_main_x += -lcrypto
+#     LIBPATHS_yut_main_x += -L"$(ME_COM_OPENSSL_PATH)"
+# endif
+# LIBS_yut_main_x += -lgo
+# ifeq ($(ME_COM_OPENSSL),1)
+#     LIBS_yut_main_x += -lgoahead-openssl
+# endif
+# ifeq ($(ME_COM_MBEDTLS),1)
+#     LIBS_yut_main_x += -lgoahead-mbedtls
+# endif
 
-$(BUILD)/bin/yut_webs_agentdemo.bin: $(DEPS_yut_main_x)
-	@echo '      [Link] $(BUILD)/bin/yut_webs_agentdemo.bin'
-	$(CC) -o $(BUILD)/bin/yut_webs_agentdemo.bin $(LDFLAGS) $(LIBPATHS) "$(BUILD)/obj/cJSON.o" "$(BUILD)/obj/yut_webs_agentdemo.o" $(LIBPATHS_yut_main_x) $(LIBS_yut_main_x) $(LIBS_yut_main_x) $(LIBS) $(LIBS) 
+# $(BUILD)/bin/yut_webs_agentdemo.bin: $(DEPS_yut_main_x)
+# 	@echo '      [Link] $(BUILD)/bin/yut_webs_agentdemo.bin'
+# 	$(CC) -o $(BUILD)/bin/yut_webs_agentdemo.bin $(LDFLAGS) $(LIBPATHS) "$(BUILD)/obj/cJSON.o" "$(BUILD)/obj/yut_webs_agentdemo.o" $(LIBPATHS_yut_main_x) $(LIBS_yut_main_x) $(LIBS_yut_main_x) $(LIBS) $(LIBS) 
 
 #
 #   gopass

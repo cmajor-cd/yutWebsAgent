@@ -3,7 +3,7 @@
 # YangYutong:2019
 # yutWebsAgentDemo
 # according to your platform, these items can be modified.
-# 1. PROFILE
+# 1. PROFILE //如果是按照goahead官方的方法定制, build目录将在goahead目录下，该参数有意义。
 # 2. ARCH
 # 3. CC
 # 4. TARGETS
@@ -18,23 +18,24 @@ VERSION               := 5.1.0
 #PROFILE               ?= default
 PROFILE ?= yut_webs_agentdemo
 #-2.yutWebsAgentDemo::TODO
-#ARCH :=arm
+#ARCH ?=arm
 ARCH                  ?= $(shell uname -m | sed 's/i.86/x86/;s/x86_64/x64/;s/arm.*/arm/;s/mips.*/mips/')
 CC_ARCH               ?= $(shell echo $(ARCH) | sed 's/x86/i686/;s/x64/x86_64/')
 OS                    ?= linux
 #-3.yutWebsAgentDemo::TODO
-#CC := arm-fsl-linux-gnueabi-gcc
+#CC ?= arm-fsl-linux-gnueabi-gcc
 CC                    ?= gcc
 AR                    ?= ar
 CONFIG                ?= $(OS)-$(ARCH)-$(PROFILE)
-#-3- reCfg dir to worksapce root
+#-3.yutWebsAgentDemo::TODO
+#--- reCfg dir to worksapce root
 #--- BUILD move to ../build
 #--- add path of 3rd libs
 #--- add path of my source code
 # BUILD                 ?= build/$(CONFIG)
 BUILD                 ?= ../build
 LIBS_3rd     ?= ../libs
-SRC_CODE_DIR ?= ../yut_webs_agentdemo
+SRC_CODE_DIR ?= ../demo_howto_customize_by_goahead_mk
 
 LBIN                  ?= $(BUILD)/bin
 PATH                  := $(LBIN):$(PATH)

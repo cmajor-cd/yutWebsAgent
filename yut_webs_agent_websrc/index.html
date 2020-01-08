@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>my special demo.html</title>
+    <meta charset="UTF-8">
+    <script src="./jquery-3.3.1.min.js"></script>
+    <script src="./index.js"></script>
+</head>
+<body>
+    <div><h2>通过ajax与设备交换数据</h2></div>
+    <table>
+    <tr><td>电压:</td><td><input type="text" name="cur_v"> V</td></tr>
+    <tr><td>转速:</td><td><input type="text" name="cur_a"> mA</td></tr>
+    <tr><td><button type="button" onclick="getCfgInfor()">获取数据</td>
+        <td><button type="button" onclick="setCfgInfor()">配置数据</td></tr>
+    </table>
+   
+    <div><h3>接口数据</h3>
+        <div><a id="myText"></a></div>
+    </div>
+   
+</body>
+</html>
