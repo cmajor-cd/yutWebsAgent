@@ -9,12 +9,12 @@
 此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。
 该子项目所有代码和 makefile 文件在目录 ***`./demo_howto_customize_by_goahead_mk`***
 代码中所有重要的修改处都以 ***yutWebsAgentDemo*** 作为标记以方便大家阅读比较。
-详细内容=>(#Project_yutWebsAgentDemo)
-
+* #### 详细内容=> [yutWebsAgentDemo定制细节](#Project_yutWebsAgentDemo)
 ## 子项目2：yut_webs_agent    
 对goAhead的 makefile 进行了较多改造，集成了 ajax 交互方式的所有 web/api/hal 层的演示。您可以直接将其替换为自己的 web 和 api/hal 代码实现一个完整的嵌入式 wesAgent服务。    
 代码中所有重要的修改处都以 ***yut_webs_agent*** 作为标记以方便大家阅读比较。
-
+* #### 详细内容=> [yut_webs_agent定制细节](#Project_yut_webs_agent)   
+------------------------
 # demo代码如何运行
 1. 准备环境
    * **方法一Linux**：准备好Linux下的工作目录
@@ -65,6 +65,7 @@
     </div>
     <button type="button" onclick="getNetworkCfgInfor()">AJAX刷新</button>
 
+------------------------
 # 目录说明
 1. goahead_src
    * goahead的官方源代码。
@@ -107,6 +108,8 @@
 7. release   
     `releaseGo.sh`发布编译结果所在的文件目录。   
     注意：如果是最终发布，需要确保``./release/webroot/``中的web app代码已经编译过。因为```releaseGo.sh```没有去本web app的代码是否已经编译过！
+
+------------------------
 
 # 子项目yutWebsAgentDemo定制说明<div id="Project_yutWebsAgentDemo"></div>
 ## 1.构建项目定制源代码目录
@@ -440,7 +443,9 @@ function getNetworkCfgInfor(){
     });
 }
 ```
-# 子项目yut_webs_a_gent定制说明<div id="Project_yut_webs_agent"></div>
+
+------------------------
+# 子项目yut_webs_agent定制说明<div id="Project_yut_webs_agent"></div>
 ## 1.构建项目定制源代码目录    
 ## 2.构建 api/hal 层代码    
 ## 3.构建 webs_agent.c 代码    
