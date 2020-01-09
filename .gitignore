@@ -54,3 +54,4 @@ dkms.conf
 # compile files
 build/
 release/
+.vscode/

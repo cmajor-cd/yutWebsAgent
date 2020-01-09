@@ -17,7 +17,7 @@
 
 #include    "goahead.h"
 #include    "js.h"
-#include "webs_agent_main.h" //yut_webs_agent
+#include "webs_agent_main.h" // TODO yut_webs_agent
 /********************************* Defines ************************************/
 
 static int finished = 0;
@@ -45,7 +45,7 @@ static int finished = 0;
 static void initPlatform(void);
 static void logHeader(void);
 static void usage(void);
-//yut_webs_agent
+// TODO yut_webs_agent
 static void action_webs_agent(Webs *wp);
 //
 #if ME_GOAHEAD_UPLOAD && !ME_ROM
@@ -151,7 +151,7 @@ MAIN(goahead, int argc, char **argv, char **envp)
         }
         wfree(endpoints);
     }
-    //yut_webs_agent
+    // TODO yut_webs_agent
     //1. regist the webs_agent in web url
     //2. define the function for this entry
     websDefineAction("webs_agent", action_webs_agent);
@@ -254,6 +254,7 @@ static void sigHandler(int signo)
 /* -------------------------------
     Implement /action/webs_agent. Parse the form variables and echo back.
     ------------------------------
+    // TODO yut_webs_agent
     * yangyutong:2019
     * 此处实现ajax.并且本样例只支持ajax数据!!!
     * 利用了cJson库来解析web传过来的json object

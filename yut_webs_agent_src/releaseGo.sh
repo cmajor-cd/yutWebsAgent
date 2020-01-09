@@ -3,7 +3,7 @@ base_dir=$(dirname $(readlink -f "$0"))
 rel_webs_bin_dir="../release/webserver"
 rel_webs_root_dir="../release/webroot"
 build_bin_dir="../build/bin"
-# webs_agent TODO: change the web src to YOUR DIR NAME!
+# TODO webs_agent: change the web src to YOUR DIR NAME!
 build_webs_root_dir="../yut_webs_agent_websrc"
 build_bin_filename="yut_webs_agent.bin"
 goahead_src_dir="../goahead_src"

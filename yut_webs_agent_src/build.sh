@@ -1,8 +1,8 @@
 #!/bin/bash
 webs_agent_src_dir="../yut_webs_agent_src"
-goahead_src_dir="../goahead_src"
+# goahead_src_dir="../goahead_src"
 goahead_src_projects_dir="../goahead_src/projects"
-build_dir="../build"
+# build_dir="../build"
 mk_filename_main="webs_agent.mk"
 mk_filename_goahead="webs_agent_gohead_cust.mk"
 

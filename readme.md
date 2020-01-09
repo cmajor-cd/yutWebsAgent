@@ -1,17 +1,21 @@
+[TOC]
 # 项目情况简介
 * 本项目是基于 goAhead 开源 web server。
 * goAhead官方文档
    https://www.embedthis.com/goahead/doc/ref/api/goahead.html
-* 本文档以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式。
+* 本项目以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式运行。
 * 本项目有以下两个子项目：
 ## 子项目1：yutWebsAgentDemo    
-基于goAhead的代码和 makefile 的定制指南。   
-此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。
-该子项目所有代码和 makefile 文件在目录 ***`./demo_howto_customize_by_goahead_mk`***
+直接基于goAhead的代码和 makefile 的定制指南。   
+此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。   
+使用这种方法可以保持 goAhead 的原始做法，相对简单，但不利之处是对自己的定制代码与 goAhead 相互侵入，不利于维护。   
+此子项目所有代码和 makefile 文件在目录 ***`./demo_howto_customize_by_goahead_mk`***中。   
 代码中所有重要的修改处都以 ***yutWebsAgentDemo*** 作为标记以方便大家阅读比较。
 * #### 详细内容=> [yutWebsAgentDemo定制细节](#Project_yutWebsAgentDemo)
 ## 子项目2：yut_webs_agent    
-对goAhead的 makefile 进行了较多改造，集成了 ajax 交互方式的所有 web/api/hal 层的演示。您可以直接将其替换为自己的 web 和 api/hal 代码实现一个完整的嵌入式 wesAgent服务。    
+此项目将定制代码与 goAhead 代码进行了解耦。    
+对goAhead的 makefile 进行了较多改造，集成了 ajax 交互方式的所有 web/api/hal 层的演示。您可以直接将其替换为自己的 web 和 api/hal 代码实现一个完整的嵌入式 wesAgent服务。      
+此子项目所有代码和 makefile 文件在目录 ***`./yut_webs_agent_src 和 ./ yut_webs_agent_websrc`*** 中。   
 代码中所有重要的修改处都以 ***yut_webs_agent*** 作为标记以方便大家阅读比较。
 * #### 详细内容=> [yut_webs_agent定制细节](#Project_yut_webs_agent)   
 ------------------------
@@ -67,15 +71,42 @@
 
 ------------------------
 # 目录说明
-1. goahead_src
+```
+yutWebsAgent
+├── build
+│   ├── bin
+│   ├── inc
+│   └── obj
+├── demo_howto_customize_by_goahead_mk
+│   ├── build.sh
+│   ├── releaseGo.sh
+│   ├── webroot
+│   │   ├── demo.html
+│   │   ├── demo.js
+│   ├── yut_webs_agentdemo.c
+│   └── yut_webs_agentdemo.mk
+├── goahead_src
+│   ├── projects
+│   │   ├── goahead-linux-default-me.h
+│   │   ├── goahead-linux-default.mk
+├── libs
+├── release
+│   ├── webroot
+│   └── webserver
+├── yut_webs_agent_src
+│   ├── api
+│   ├── hal
+└── yut_webs_agent_websrc
+```
+1. **goahead_src**
    * goahead的官方源代码。
    * 该目录被 build.sh 引用。
-   * 如果要改动需要同步变更 build.sh 脚本中$定义的：goahead_src_dir / goahead_src_projects_dir
-2. demo_howto_customize_by_goahead_mk
+   * 如果要改动需要同步变更 build.sh 脚本中定义的：```$goahead_src_dir / $goahead_src_projects_dir```
+2. **demo_howto_customize_by_goahead_mk**
    * ***子项目1*** 的演示代码目录
    * 移植定制文件目录，您可以变更为您自己的目录名。
    * 如果要改动 **该目录名** 需要同步变更同级目录下的makefile文件``yut_webs_agentdemo.mk`` 脚本中的```SRC_CODE_DIR```定义。
-   * 该目录中的文件
+   * 该目录包含的文件
      * source files
      * makefile文件: 缺省的mk文件名为```yut_webs_agentdemo.mk```，该文件需与`build.sh`脚本中的``$mk_filename``定义保持一致。 
      * build.sh编译脚本文件，该脚本定义了build-make方法，请注意定制是保证以下内容正确：
@@ -96,22 +127,25 @@
         ```
    * 该目录中的子目录
      * webroot: web app的源代码目录，请保证**该子目录名**与`releaseGo.sh`脚本中的``$build_webs_root_dir``保持一致。
-3. yut_webs_agent_src
-   * ***子项目2*** yut_webs_agent 的 .c / makefile 代码演示代码目录
+3. **yut_webs_agent_src**
+   * ***子项目2*** ***yut_webs_agent*** 的 .c / makefile 代码演示代码目录。   
+   * 其文件组成与***子项目1***类似。
 4. yut_webs_agent_websrc
-   * ***子项目2*** yut_webs_agent 的 web 代码演示代码目录
+   * ***子项目2*** ***yut_webs_agent*** 的 web 代码演示代码目录。   
 5. libs
    * 3方库文件存放目录。
-   * 该**目录名**需要与``yut_webs_agentdemo.mk`` 脚本中的```LIBS_3rd```定义保持一致。
+   * 该**目录名**需要与``yut_webs_agentdemo.mk/webs_agent.mk`` 脚本中的```LIBS_3rd```定义保持一致。
 6. build   
     build.sh编译脚本，编译定制代码后的输出文件存放目录。
 7. release   
     `releaseGo.sh`发布编译结果所在的文件目录。   
-    注意：如果是最终发布，需要确保``./release/webroot/``中的web app代码已经编译过。因为```releaseGo.sh```没有去本web app的代码是否已经编译过！
+    注意：如果是最终发布，需要确保``./release/webroot/``中的web app代码已经编译过。因为```releaseGo.sh```没有检查本web app的代码是否已经编译过！
 
 ------------------------
 
 # 子项目yutWebsAgentDemo定制说明<div id="Project_yutWebsAgentDemo"></div>
+此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。   
+使用这种方法可以保持 goAhead 的原始做法，相对简单，但不利之处是对自己的定制代码与 goAhead 相互侵入，不利于维护。   
 ## 1.构建项目定制源代码目录
 * 按照demo的目录结构构建自己的目录
   * 可以简单的 ``git clone``，也可以手工构建。
@@ -188,7 +222,7 @@
     对官方提供其他 features 的链接输出配置，可以根据具体的需求保留相关配置或者注释掉。   
     比如，样例mk中将 `gopass` 注释掉后，该模块不再 `link` 出目标bin文件。
 
-## 3.定制 main.c(goAction方式)的功能代码   
+## 3.定制 main.c(goAction方式)的功能代码<div id="Project_yutWebsAgentDemo_main_c"></div>   
     作为样例的main.c文件 yut_webs_agentdemo.c，来自于goAhead官方的样例文件 ./goahead_src/test.c。其中有一些不需要内容已经删除，保留了主要的、与goAction编程相关的以便于作为demo阅读。
 ### 3.1.action处理函数声明和注册
 * **声明action处理函数**   
@@ -269,7 +303,7 @@ int SUBMIT_NAME_VALUE_func(Webs *wp){
     websDone(wp);
 }
 ```
-### 3.3.action处理函数实现(ajax提交方式)   
+### 3.3.action处理函数实现(ajax提交方式)<div id="Project_yutWebsAgentDemo_cjson"></div>   
 大多数web页面都要求进行局部刷新，所以处理ajax是必不可少的能力。goAhead官方没有提供直接的API来处理ajax。但它的API结构中有名为`Webs`的数据结构，其保存了所有的`http消息`信息，我们可以通过Webs中的数据来处理ajax请求。
 #### 3.3.1.导入cJSON库   
     外部三方库的引入方式前面章节已经详细讲解，请直接参考前面章节。
@@ -446,9 +480,74 @@ function getNetworkCfgInfor(){
 
 ------------------------
 # 子项目yut_webs_agent定制说明<div id="Project_yut_webs_agent"></div>
-## 1.构建项目定制源代码目录    
-## 2.构建 api/hal 层代码    
-## 3.构建 webs_agent.c 代码    
-## 4.构建 web 代码    
-## 5.构建 makefile    
+此项目将定制代码与 goAhead 代码进行了解耦。    
+对goAhead的 makefile 进行了较多改造，集成了 ajax 交互方式的所有 web/api/hal 层的演示。您可以直接将其替换为自己的 web 和 api/hal 代码实现一个完整的嵌入式 wesAgent服务。      
+此子项目所有代码和 makefile 文件在目录 ***`./yut_webs_agent_src 和 ./ yut_webs_agent_websrc`*** 中。   
+#### ***注意：*** 所有需要您关注的关键定制点都以 ***`TODO`*** 标记了出来！   
+## 1. 数据流图   
+```mermaid
+graph LR;
+a[web ajax]-->b{goAhead};
+  b-->|http service|c(goAhead http);
+  b-->|api service|d(websAgent);
+    d-->e(api layer);
+    d-->f(hal layer);
+        f-->g(bsp driver)
+```    
+## 2. 构建项目定制源代码目录    
+* 构建自己的 webs_agent_src 框架源码**主目录`./yut_webs_agent_src`**，可直接参照本项目的目录结构。主目录内存放以下内容：   
+  * main.c 文件(```webs_agent_main.c```)和它的 .h 头文件。该文件名如果与缺省不一致，请对应修改makefile文件中***对应的文件/目标名***。
+  * makefile文件(```webs_agent.mk```)，该文件名可以自己定义。
+* 框架子目录
+  * ```api```应用接口层：该目录存放api层代码，该层从硬件驱动(通过```hal层```)获取/操作硬件数据，用于完成对 ajax 请求中个各条命令的一一响应。
+  * ```hal```设备抽象层：该目录存放hal层代码，该层通过硬件驱动获取/操作底层硬件，提供给 api 层访问设备硬件的能力。
+* `build.sh`文件
+  * 本脚本运行时会将定制好的 goAhead makefile 文件拷贝到 `goAhead_src/projects`，然后在本目录运行自己的 makefile 文件``webs_agent.mk``。
+  * 脚本中的路径定义都是以本目录(`./yut_webs_agent_src`)为base来确定的，请确保各路径和目录名定义正确。
+* ``releaseGo.sh``文件
+  * 本脚本运行时会构建 `release 目录`，并将 `build 目录` 中必须文件拷贝到 `release 目录` 中。然后启动bin文件运行并监听本地 8080 端口用于测试。
+  * 以本目录为base确保以下路径和目录名定义正确。
+    ```
+    rel_webs_bin_dir="../release/webserver"
+    rel_webs_root_dir="../release/webroot"
+    build_bin_dir="../build/bin"
+    build_webs_root_dir="../yut_webs_agent_websrc"
+    build_bin_filename="yut_webs_agent.bin"
+    goahead_src_dir="../goahead_src"   
+    ```
+## 3. 构建 api/hal 层代码    
+目录结构参考**主目录`./yut_webs_agent_src/api 和 hal`**。   
+本层的代码可以自由组织，需要注意的是子目录下的 makefile 的组织：
+  * makefile的文件名必须是`makefile`，以便于上一级makefile自动调用。
+  * 本级 makefile 中的 `.h` 会被 `build.sh` 脚本自动拷贝到 `../build/inc` 中。
+  * 本机的所有 `.c` 文件及其对应的 `.o` 文件需要手工添加到 makefile 的依赖列表中。
+## 4. 构建 webs_agent_main.c 代码    
+本文件的来源细节可以查看 [子项目1：yutWebsAgentDemo`](#Project_yutWebsAgentDemo_main_c) 中的说明。
+该文件主要的定制处以 `TODO` 标记，完成以下工作：
+  * 定义goAction回调函数 `static void action_webs_agent(Webs *wp);`
+  * 注册回调函数 `websDefineAction("webs_agent", action_webs_agent);`
+  * 定制回调函数，将自己的 `api` ajax接口处理函数添加进去。
+    ```
+          if(!strcasecmp(p_json_node_value, SET_CFG_INFOR)){
+            func_SET_CFG_INFOR(p_json_in, p_json_out);
+        }else if(!strcasecmp(p_json_node_value, GET_CFG_INFOR)){
+            func_GET_CFG_INFOR(p_json_in, p_json_out);
+        }
 
+    ```
+  * goAction 相关的调用方法和 `cJson` 数据的处理细节可以参考 [子项目1：yutWebsAgentDemo`](#Project_yutWebsAgentDemo_cjson) 中对 `ajax cjson` 数据处理的说明。    
+## 5. 构建 web 代码    
+目录结构参考**主目录`./yut_webs_agent_websrc`**。   
+该目录中包括了所有的 webapp 内容，可以自由组织，该目录的编写需要注意以下问题：
+  * `webapp`编译发布目录如果有自己定制，请对应修改 `releaseGo.sh` 中的宏定义 `$build_webs_root_dir`，该脚本会将最终编译出的 `webapp` 代码发布到最终发布目录。
+## 6. 构建 makefile    
+### 6.1 本项目 makefile 文件
+  * 主控makefile位于目录 `./yut_webs_agent_src`，文件名为 `webs_agent_main.mk` 该文件名可以自己定义。
+  * 主控makefile运行中调用每个子目录下的子makefile。调用过程是自动的，所以子目录下的makefile文件的文件名必须是 ***`makefile`***
+  * 主控makefile的内容定制方法主要点都以 `TODO` 进行了标记。
+    * 根据需要定制编译平台和编译选项 `1. TODO`
+    * 根据需要定制/添加其他外部模块，包括三方 Liabs 的路径 `2. TODO`
+    * 根据需要定制/修改需要链接的 .o/.a 目标和库文件名 `3. TODO`
+### 6.2 定制 goAhead makefile 文件
+  * 文件名 `webs_agent_gohead_cust.mk`，该文件会在编译时由 `build.sh` 拷贝到 `../goahead_src/projects` 中并改名为 `makefile`。
+  * 因为本项目框架对 goAhead 的代码和 makefile 进行了解耦，所以一般情况不需要再次定制 goAhead 的 makefile。该文件必须的定制处已经做了必要的定制，如需修改请对照 goAhead 的官方 makefile 进行修改。
