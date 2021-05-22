@@ -7,7 +7,7 @@ extern "C"
 #endif
 
 #include "cJSON.h"
-#include "api.h"
+#include "regist_router_api.h"
 
 #ifdef __cplusplus
 }

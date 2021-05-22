@@ -152,7 +152,7 @@ MAIN(goahead, int argc, char **argv, char **envp)
         wfree(endpoints);
     }
     // TODO yut_webs_agent
-    //1. regist the webs_agent in web url
+    //1. regist the webs_agent in web url:"/action/webs_agent",
     //2. define the function for this entry
     websDefineAction("webs_agent", action_webs_agent);
     //
