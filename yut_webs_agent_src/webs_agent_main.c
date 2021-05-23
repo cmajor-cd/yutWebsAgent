@@ -153,8 +153,13 @@ MAIN(goahead, int argc, char **argv, char **envp)
     }
     // TODO yut_webs_agent
     //1. regist the webs_agent in web url:"/action/webs_agent",
-    //2. define the function for this entry
-    websDefineAction("webs_agent", action_webs_agent);
+    //2. at this time, we regist ALL router to the same on function action_webs_agent(Webs *wp)
+    //     because GoAhead request the action callback to handle (Webs *wp), we dont' want to user's api cbfunction to do this.
+    //     so, we regiest all router api to action_webs_agent(Webs *wp), this function will re-route to user's api according to the url.
+    for(int i = _ROUTER_API_BEGIN; i < _ROUTER_API_MAX_LENGTH-1; i++){
+        websDefineAction(m_api_callback[i].p_url_name, action_webs_agent);
+        // websDefineAction("webs_agent", action_webs_agent);
+    }
     //
 #if ME_GOAHEAD_UPLOAD && !ME_ROM
     websDefineAction("uploadTest", uploadTest);
@@ -271,47 +276,58 @@ static void sigHandler(int signo)
 #define MAX_INPUT_BUFF 4096
 static void action_webs_agent(Webs *wp)
 {
-    cJSON* p_json_in = NULL;
-    cJSON* p_json_node = NULL;
-    char* p_json_node_value;
-    //
-    //* get input buff
-    char buff[MAX_INPUT_BUFF];
-    int len = bufGetBlk(&(wp->input), buff, bufLen(&(wp->input)));
-    buff[len] = '\0'; //插入结束符
-    //* decode json object by cJSON libs' api
-    p_json_in = cJSON_Parse(buff);
-    if(!p_json_in)
-    {
-        printf("Error[webs_agent] : [%s]\n", cJSON_GetErrorPtr());
-        return;
-    }
-    else
-    {
-        // create the output cjson root
-        cJSON* p_json_out = cJSON_CreateObject();
-        // create the node. "dat"
-        cJSON* p_json_out_dat = cJSON_CreateObject();
-        cJSON_AddItemToObject(p_json_out, JSON_DAT, p_json_out_dat);
+    // locate to the router api by Webs->path
+    for(int i = _ROUTER_API_BEGIN; i < _ROUTER_API_MAX_LENGTH-1; i++){
+        printf("api_fn: %s <> Webs-url: %s\n", m_api_callback[i].p_url_name, Webs->path);
+        if(!strcasecmp(m_api_callback[i].p_url_name, Webs->path)){
+            cJSON* p_json_in = NULL;
+            cJSON* p_json_node = NULL;
+            char* p_json_node_value;
+            //
+            //* get input buff
+            char buff[MAX_INPUT_BUFF];
+            int len = bufGetBlk(&(wp->input), buff, bufLen(&(wp->input)));
+            buff[len] = '\0'; //插入结束符
+            //* decode json object by cJSON libs' api
+            p_json_in = cJSON_Parse(buff);
+            if(!p_json_in)
+            {
+                printf("Error[webs_agent] : [%s]\n", cJSON_GetErrorPtr());
+                return;
+            }
+            else
+            {
+                // create the output cjson root
+                cJSON* p_json_out = cJSON_CreateObject();
+                // create the node. "dat"
+                cJSON* p_json_out_dat = cJSON_CreateObject();
+                cJSON_AddItemToObject(p_json_out, JSON_DAT, p_json_out_dat);
 
-        // get the input value of key:command
-        p_json_node = cJSON_GetObjectItem(p_json_in, JSON_COMMAND);
-        p_json_node_value = cJSON_GetStringValue(p_json_node);
-        printf("Log[ajax-command] : [%s]\n", p_json_node_value);
-        if(!strcasecmp(p_json_node_value, SET_CFG_INFOR)){
-            func_SET_CFG_INFOR(p_json_in, p_json_out);
-        }else if(!strcasecmp(p_json_node_value, GET_CFG_INFOR)){
-            func_GET_CFG_INFOR(p_json_in, p_json_out);
+                // call the callback api function
+                m_api_callback[i].fn_cb(p_json_in, p_json_out);
+
+                // get the input value of key:command
+                // p_json_node = cJSON_GetObjectItem(p_json_in, JSON_COMMAND);
+                // p_json_node_value = cJSON_GetStringValue(p_json_node);
+                // printf("Log[ajax-command] : [%s]\n", p_json_node_value);
+                // if(!strcasecmp(p_json_node_value, SET_CFG_INFOR)){
+                //     func_SET_CFG_INFOR(p_json_in, p_json_out);
+                // }else if(!strcasecmp(p_json_node_value, GET_CFG_INFOR)){
+                //     func_GET_CFG_INFOR(p_json_in, p_json_out);
+                // }
+                //
+                // 4. fill the goAction webs return.
+                websSetStatus(wp, 200);
+                websWriteHeaders(wp, -1, 0);
+                websWriteEndHeaders(wp);
+                websWrite(wp, "%s", cJSON_Print(p_json_out));
+                websFlush(wp, 0);
+                websDone(wp);
+                return;
+            }
         }
-        //
-        // 4. fill the goAction webs return.
-        websSetStatus(wp, 200);
-        websWriteHeaders(wp, -1, 0);
-        websWriteEndHeaders(wp);
-        websWrite(wp, "%s", cJSON_Print(p_json_out));
-        websFlush(wp, 0);
-        websDone(wp);
     }
+
 }
 
 

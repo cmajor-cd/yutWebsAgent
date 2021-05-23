@@ -13,12 +13,17 @@ extern "C"
 
 struct regist_router_api
 {
-    char* p_url_name; // router url, e.g. url: "/action/set_data".
-    void* f_cb;       // the callback function pointer.
+    char* p_url_name;  // router url, e.g. url: "/action/set_data".
+    void* fn_cb;       // the callback function pointer.
 };
 
-#define MAX_LENGTH 100 // define the max length of the callback array.
-static regist_router_api m_api_callback[MAX_LENGTH] = {
+enum regist_router_api_number{
+    _ROUTER_API_BEGIN = 0,  // TODO, !!add your router_api name into the line!!
+    _ROUTER_API_MAX_LENGTH  // define the max length of the api callback function  array.
+}
+
+static regist_router_api m_api_callback[_ROUTER_API_MAX_LENGTH] = {
+    // TODO, !!add your router_api name/callback function pair into the line!!
     {"setCfgInfor", func_SET_CFG_INFOR},
     {"getCfgInfor", func_GET_CFG_INFOR}
 };
