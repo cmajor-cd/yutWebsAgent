@@ -61,9 +61,9 @@ LIBS                  += -lrt -ldl -lpthread -lm
 
 DEBUG                 ?= debug
 CFLAGS-debug          ?= -g
-DFLAGS-debug          ?= -DME_DEBUG
+DFLAGS-debug          ?= -DME_DEBUG=1
 LDFLAGS-debug         ?= -g
-DFLAGS-release        ?= 
+DFLAGS-release        ?= -DME_DEBUG=0
 CFLAGS-release        ?= -O2
 LDFLAGS-release       ?= 
 CFLAGS                += $(CFLAGS-$(DEBUG))

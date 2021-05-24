@@ -32,7 +32,7 @@
     ```
     $ cd demo_howto_customize_by_goahead_mk/
     $ ./build.sh
-    $ ./releaseGo.sh
+    $ ./releaseGo.sh or sudo ./releaseGo.sh
     ```
     系统显示处如下log意味着运行成功。
     ```

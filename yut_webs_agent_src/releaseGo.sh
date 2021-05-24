@@ -4,7 +4,7 @@ rel_webs_bin_dir="../release/webserver"
 rel_webs_root_dir="../release/webroot"
 build_bin_dir="../build/bin"
 # TODO webs_agent: change the web src to YOUR DIR NAME!
-build_webs_root_dir="../yut_webs_agent_websrc"
+build_webs_root_dir="../demo_ajax_websrc"
 build_bin_filename="yut_webs_agent.bin"
 goahead_src_dir="../goahead_src"
 

@@ -6,7 +6,7 @@ function getCfgInfor(){
     parameters = JSON.stringify(str);
     $.ajax({
         type:"POST",
-        url: "/action/webs_agent",
+        url: "/action/getCfgInfor",
         data: parameters,
         contentType: 'application/json',
         dataType: 'json',//'text'
@@ -52,7 +52,7 @@ function setCfgInfor(){
     parameters = JSON.stringify(str);
     $.ajax({
         type:"POST",
-        url: "/action/webs_agent",
+        url: "/action/setCfgInfor",
         data: parameters,
         contentType: 'application/json',
         dataType: 'json',//'text'
