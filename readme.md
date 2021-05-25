@@ -62,9 +62,8 @@ goahead: 2: Started http://0.0.0.0:8080
 
 --------------------
 --------------------
-如果需要了解具体代码的处理细节和makefile的修改细节，请参考以下章节：
-
 # 了解更多细节
+如果需要了解具体代码的处理细节和makefile的修改细节，请参考以下章节：  
 ## 子项目1：yutWebsAgentDemo    
 直接基于goAhead的代码和 makefile 的定制指南。   
 此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。   
@@ -80,6 +79,7 @@ goahead: 2: Started http://0.0.0.0:8080
 * #### 详细内容=> [yut_webs_agent定制细节](#Project_yut_webs_agent)   
 ------------------------
 # demo代码如何运行
+
 1. 准备环境
    * **方法一Linux**：准备好Linux下的工作目录
    * **方法二Windows**：打开Windows10-WSL Ubuntu环境并准备好工作目录
@@ -131,6 +131,7 @@ goahead: 2: Started http://0.0.0.0:8080
 
 ------------------------
 # 目录说明
+
 ```
 yutWebsAgent
 ├── build
