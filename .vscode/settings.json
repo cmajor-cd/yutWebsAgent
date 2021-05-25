@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "app.h": "c"
+        "app.h": "c",
+        "api.h": "c"
     }
 }

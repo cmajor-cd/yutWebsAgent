@@ -1,10 +1,70 @@
 [TOC]
 # 项目情况简介
-* 本项目是基于 goAhead 开源 web server。
-* goAhead官方文档
-   https://www.embedthis.com/goahead/doc/ref/api/goahead.html
+* 本项目是基于 goAhead 开源 web server。goAhead官方文档  https://www.embedthis.com/goahead/doc/ref/api/goahead.html
 * 本项目以 ***makefile*** 方式构建项目，同时相关脚本文件以 ***`bash`*** 编写，所以代码最好在 ***`Linux`*** 下进行编译调试或者 ***`Windows10-WSL`*** 方式运行。
-* 本项目有以下两个子项目：
+* 本项目对goAhead 进行了解耦封装，您只需要 6 步 就可以完成自己的定制工作。细节见 ***`B. 如何定制自己的 server `***  
+
+# A. Demo使用方法
+## A.1. 准备环境    
+1. 准备Linux环境
+   * **方法一Linux**：准备好Linux下的工作目录
+   * **方法二Windows**：打开Windows10-WSL Ubuntu环境并准备好工作目录
+2. clone代码
+    ```
+    https://gitee.com/cmajor-cd/yutWebsAgent.git
+    https://github.com/cmajor-cd/yutWebsAgent.git
+    ```
+## A.2.体验demo    
+1. 进入 main 目录    
+2. 编译  
+3. 发布/安装bin文件  
+4. 运行 server  
+5. 运行 web client: 打开浏览器输入   http://127.0.0.1:8080/index.html
+```
+ $ cd ./yut_webs_agent_src  
+     (如果要体验 goAhead 原生非解耦 demo 则：cd demo_howto_customize_by_goahead_mk/)
+ $ sudo ./build.sh
+ $ sudo ./releaseGo.sh
+goahead: 2: Configuration for Embedthis GoAhead Community Edition
+goahead: 2: ---------------------------------------------
+goahead: 2: Version:            5.1.0
+goahead: 2: BuildType:          Release
+goahead: 2: CPU:                x64
+goahead: 2: OS:                 linux
+goahead: 2: Host:               127.0.1.1
+goahead: 2: Directory:          /mnt/d/workspace/VS/yutWebsAgent/release/webserver
+goahead: 2: Documents:          /mnt/d/workspace/VS/yutWebsAgent/yut_webs_agent_src/../release/webroot
+goahead: 2: Configure:          me -d -q -platform linux-x86-default -configure . -gen make
+goahead: 2: ---------------------------------------------
+goahead: 2: Started http://0.0.0.0:8080
+```
+
+# B. 如何定制自己的 server 
+1. 规划定义接口API命令和处理函数(即：路由)
+    * goAhead 缺省定义根路由为 '/action/'；用户自己定义的路由连接到根路由后面，e.g. '/action/my_req_path'
+    * demo 假设用户定义了API命令 'setCfgInfor'、对应处理函数为 'func_SET_CFG_INFOR(cJSON *json_in, cJSON *json_out);'
+        * 注意：处理函数的参数必须为(cJSON *json_in, cJSON *json_out)
+        * 如果您想注册不同输入参数，请修改 file:webs_agent_main.c / line239.
+2. 注册API命令到系统回调表中(file:regist_router_api.h)  
+    * 添加命令字到枚举类型 enum t_regist_router_api_number 中, e.g. '_setCfgInfor'
+    * 添加命令字 vs 处理函数 到 m_api_callback[] 中, e.g. {"setCfgInfor", func_SET_CFG_INFOR}
+3. 实现API函数  
+    * ./api/api.c 和 ./hal/hal.c 中demo了如何实现API函数以及其可能所需的访问硬件的hal层代码
+    * 如果您要在自己定义的目录中实现API，请注意参考./api/makefile 定义。
+4. 编译/运行
+    * 确定运行平台：在 'webs_agent_gohead_cust.mk' 中配置 ARCH 和 CC
+    * build.sh / releaseGo.sh
+5. web client 的代码如何处理
+    * 可以将开发好的 web client 代码放在 ./demo_ajax_websrc 中，运行 source ./releaseGo.sh 时会自动部署
+    * 如果您要放到您自己的目录，请修改 releaseGo.sh 脚本中的 $build_webs_root_dir
+    * 如果不需要自动部署web代码，您可以自行将web代码拷贝到 ./release/webroot
+6. 运行调试 web client: 打开浏览器输入   http://127.0.0.1:8080/index.html
+
+--------------------
+--------------------
+如果需要了解具体代码的处理细节和makefile的修改细节，请参考以下章节：
+
+# 了解更多细节
 ## 子项目1：yutWebsAgentDemo    
 直接基于goAhead的代码和 makefile 的定制指南。   
 此子项目 demo 了如何直接从 goAhead 的源代码和 makefile 基础上进行定制的方法。   

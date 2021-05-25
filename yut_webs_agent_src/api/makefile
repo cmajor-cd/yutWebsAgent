@@ -11,7 +11,7 @@ all build compile: $(BUILD)/obj/webs_agent_api.a
 # ---- hal file list ++++
 WEBSAGENT_API_SRC_H = $(wildcard *.h)
 WEBSAGENT_API_SRC_C = $(wildcard *.c)
-# WEBSAGENT_APP_OBJ_CC = $(patsubst %.c, %.o, $(WEBSAGENT_API_SRC_C))
+WEBSAGENT_API_OBJS = $(patsubst %.c, %.o, $(WEBSAGENT_API_SRC_C))
 
 # ----- copy *.h to ./$(BUILD)/inc
 api_h: $(WEBSAGENT_API_SRC_H)
@@ -21,26 +21,20 @@ api_h: $(WEBSAGENT_API_SRC_H)
 	cp $(WEBSAGENT_API_SRC_H) $(BUILD)/inc/
 
 #--- compile .o ---
-# app_o:
-	# $(foreach item,$(WEBSAGENT_API_SRC_C),\
-	# 	echo $(item);\
-	# 	echo $(BUILD)/obj/$(patsubst %.c, %.o, $(item)) | sed 's/ //g';\
-	# 	$(CC) -c $(item) -o $(BUILD)/obj/$(patsubst %.c, %.o, ${$(item)// //g}); \
-	# )
-# ---- api.o ----
-# DEPS_yut_hal_1 += hal_h
-$(BUILD)/obj/api.o: 
-	@echo '=>[Compile] api.o'
-	$(CC) -c -o $(BUILD)/obj/api.o $(CFLAGS) $(DFLAGS) $(IFLAGS) ./api.c
-# ---- api.o ----
+api_o: api_h
+	@echo '=>[Compile] WEBSAGENT_API O files: $(WEBSAGENT_API_OBJS)'
+	$(foreach item,$(WEBSAGENT_API_OBJS),\
+		$(CC) -c -o $(BUILD)/obj/$(item)  $(CFLAGS) $(DFLAGS) $(IFLAGS) $(patsubst %.o, %.c, $(item)) ; \
+	)
 
 ###########################################################################
 #  Compile webs_agent_api.a                                               #
 #                                                                         #
 ###########################################################################
-DEPS_yut_hal_x += api_h
-DEPS_yut_hal_x += $(BUILD)/obj/api.o
+DEPS_yut_api_x := $(foreach item,$(WEBSAGENT_API_OBJS),\
+		$(BUILD)/obj/$(item)\
+	)
 
-$(BUILD)/obj/webs_agent_api.a: $(DEPS_yut_hal_x)
-	@echo '=>[Link] $(BUILD)/obj/webs_agent_api.a'
-	$(AR) -cr $(BUILD)/obj/webs_agent_api.a $(BUILD)/obj/api.o
+$(BUILD)/obj/webs_agent_api.a: api_o
+	@echo '=>[Build] $(BUILD)/obj/webs_agent_api.a'
+	$(AR) -cr $(BUILD)/obj/webs_agent_api.a $(DEPS_yut_api_x) 
